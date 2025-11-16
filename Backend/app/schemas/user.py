@@ -1,0 +1,25 @@
+from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
+
+class UserBase(BaseModel):
+    username: str = Field(..., example="john_moe")
+    email: str = Field(..., example="johnmoe@gmail.com")
+    
+class UserCreate(UserBase):
+    password: str = Field(..., min_length=10, example="strongpassword123")
+
+class UserOut(UserBase):
+    id: int
+    role: str
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = Field(None, example="john_moe_updated")
+    email: Optional[str] = Field(None, example="johnmoe@gmail.com")
+    password: Optional[str] = Field(None, min_length=10, example="newstrongpassword123")
