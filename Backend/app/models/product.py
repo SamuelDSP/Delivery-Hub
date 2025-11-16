@@ -9,7 +9,7 @@ from sqlalchemy import Integer, String, Float, DateTime, ForeignKey, text
 class Product(Base):
     __tablename__ = "products"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True, autoincrement=True)
 
     name: Mapped[str] = mapped_column(String, index=True)
     description: Mapped[str] = mapped_column(String, index=True)
