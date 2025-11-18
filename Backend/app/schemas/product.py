@@ -22,7 +22,16 @@ class ProductOut(ProductBase):
     id: int
     created_at: datetime
     updated_at: datetime
-    created_by_user_id: int
+    created_by_user_id: Optional[int] = None
+
+    photo_url: Optional[str] = None
+    photo_mime_type: Optional[str] = None
+    photo_width: Optional[int] = None
+    photo_height: Optional[int] = None
+    photo_bytes_size: Optional[int] = None
+    photo_hash: Optional[str] = None
+    photo_file_name: Optional[str] = None
+    photo_thumbnail_url: Optional[str] = None
 
     model_config = {
         "from_attributes": True
