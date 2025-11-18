@@ -68,16 +68,16 @@ async def get_product_by_id_endpoint(product_id: int, db: AsyncSession = Depends
         }
     }
 })
-async def update_product_endpoint(product_id: int, product: ProductUpdate, db: AsyncSession = Depends(get_db)):
-    product = await update_product_service(db, product_id, product)
+async def update_product_endpoint(product_id: int, product_in: ProductUpdate, db: AsyncSession = Depends(get_db)):
+    updated_product = await update_product_service(db, product_id, product_in)
 
-    if product == None:
+    if updated_product == None:
         raise HTTPException(status_code=404, detail="Product not found")
     
-    return product
+    return updated_product
 
 
-@router.delete("/{product_id}", status_code=204, responses={
+@router.delete("/{product_id}", status_code=204, responses={204 : {"description" : "No Content"},
     404 : {
         "model" : ErrorResponse,
         "description" : "Not Found",

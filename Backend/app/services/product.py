@@ -4,7 +4,7 @@ from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
 from sqlalchemy.exc import IntegrityError
 
 async def create_product_service(db: AsyncSession, product: ProductCreate) -> ProductOut:
-    new_product = Product(**product.model_dump())
+    new_product = Product(**product.model_dump(exclude_unset=True))
 
     db.add(new_product)
     try:
@@ -25,12 +25,12 @@ async def get_product_by_id_service(db: AsyncSession, product_id: int) -> Produc
     return product
 
 
-async def update_product_service(db: AsyncSession, product_id: int, product: ProductUpdate) -> ProductOut:
+async def update_product_service(db: AsyncSession, product_id: int, product_in: ProductUpdate) -> ProductOut:
     product = await db.get(Product, product_id)
     if product == None:
         return None
     
-    data = product.model_dump(exclude_unset=True)
+    data = product_in.model_dump(exclude_unset=True)
     for key, value in data.items():
         setattr(product, key, value)
 
