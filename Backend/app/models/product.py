@@ -11,7 +11,7 @@ class Product(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, autoincrement=True)
 
-    name: Mapped[str] = mapped_column(String, index=True)
+    name: Mapped[str] = mapped_column(String, index=True, unique=True, nullable=False)
     description: Mapped[str] = mapped_column(String, index=True)
     price: Mapped[float] = mapped_column(Float, nullable=False)
     stock: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -19,7 +19,7 @@ class Product(Base):
     created_by_user_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=False
+        nullable=True
     )
 
     created_at: Mapped[datetime] = mapped_column(
