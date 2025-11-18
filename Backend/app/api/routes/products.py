@@ -7,10 +7,23 @@ from app.services.product import (
     get_product_by_id_service,
     update_product_service,
     delete_product_service)
+from app.schemas.error_response import ErrorResponse
 
 router = APIRouter(prefix="/products", tags=["products"])
 
-@router.post("/", response_model=ProductOut)
+@router.post("/", response_model=ProductOut, responses={
+    400 : {
+        "model" : ErrorResponse,
+        "description" : "Bad Request",
+        "content": {
+            "application/json": {
+                "example": {"detail": "Product with given details already exists",
+                            "error_code" : "Bad Request",
+                            "status" : 400}
+            }
+        }
+    }
+})
 async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Depends(get_db)):
     product = await create_product_service(db, product)
 
@@ -20,7 +33,19 @@ async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Dep
     return product
 
 
-@router.get("/{product_id}", response_model=ProductOut)
+@router.get("/{product_id}", response_model=ProductOut, responses={
+    404 : {
+        "model" : ErrorResponse,
+        "description" : "Not Found",
+        "content": {
+            "application/json": {
+                "example": {"detail": "Product not found",
+                            "error_code": "PRODUCT_NOT_FOUND",
+                            "status": 404}
+            }
+        }
+    }
+})
 async def get_product_by_id_endpoint(product_id: int, db: AsyncSession = Depends(get_db)):
     product = await get_product_by_id_service(db, product_id)
 
@@ -30,7 +55,19 @@ async def get_product_by_id_endpoint(product_id: int, db: AsyncSession = Depends
     return product
 
 
-@router.put("/{product_id}", response_model=ProductOut)
+@router.put("/{product_id}", response_model=ProductOut, responses={
+    404 : {
+        "model" : ErrorResponse,
+        "description" : "Not Found",
+        "content": {
+            "application/json": {
+                "example": {"detail": "Product not found",
+                            "error_code": "PRODUCT_NOT_FOUND",
+                            "status": 404}
+            }
+        }
+    }
+})
 async def update_product_endpoint(product_id: int, product: ProductUpdate, db: AsyncSession = Depends(get_db)):
     product = await update_product_service(db, product_id, product)
 
@@ -40,7 +77,19 @@ async def update_product_endpoint(product_id: int, product: ProductUpdate, db: A
     return product
 
 
-@router.delete("/{product_id}", status_code=204)
+@router.delete("/{product_id}", status_code=204, responses={
+    404 : {
+        "model" : ErrorResponse,
+        "description" : "Not Found",
+        "content": {
+            "application/json": {
+                "example": {"detail": "Product not found",
+                            "error_code": "PRODUCT_NOT_FOUND",
+                            "status": 404}
+            }
+        }
+    }
+})
 async def delete_product_endpoint(product_id: int, db: AsyncSession = Depends(get_db)):
     delete = await delete_product_service(db, product_id)
 
