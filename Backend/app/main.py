@@ -22,3 +22,5 @@ def add_cors_middleware(app: FastAPI):
 def include_routers(app: FastAPI):
     app.include_router(products.router)
     app.include_router(users.router)
+
+app = create_app()
