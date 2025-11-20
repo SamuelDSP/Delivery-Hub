@@ -1,35 +1,48 @@
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import sessionmaker
-from app.api.deps import get_db
-from alembic import command
-from alembic.config import Config
-from app.core.config import settings
-import app
+import pytest_asyncio
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from app.db.base import Base
+from app.main import app
+from app.db.deps import get_db
+from httpx import AsyncClient
 
-engine_test = create_async_engine(settings.database_test_url, echo=False)
-SessionTest = async_sessionmaker(engine_test, expire_on_commit=False, class_=AsyncSession)
-
-@pytest.fixture(scope="session", autouse=True)
-def apply_migrations_in_db_test():
-    alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_main_option("sqlalchemy.url", settings.database_test_url)
-    command.upgrade(alembic_cfg, "head")
-
-@pytest.fixture()
+@pytest_asyncio.fixture(scope="function")
 async def db_session():
-    async with engine_test.begin() as conn:
-        await conn.begin()
-        await conn.begin_nested()
-        async_session = SessionTest(bind=conn)
-        try:
-            yield async_session
-        finally:
-            await async_session.close()
-            await conn.rollback()
-
-async def override_get_db():
-    async with SessionTest() as session:
+    engine = create_async_engine(
+        "sqlite+aiosqlite:///:memory:",
+        echo=True
+    )
+    
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
+    
+    TestingSessionLocal = async_sessionmaker(
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+        autoflush=False
+    )
+    
+    session = TestingSessionLocal()
+    
+    try:
         yield session
+    finally:
+        await session.close()
+        await engine.dispose()
 
-app.dependency_overrides[get_db] = override_get_db
+@pytest_asyncio.fixture(scope="function")
+async def client(db_session):
+    async def override_get_db():
+        try:
+            yield db_session
+        finally:
+            pass
+    
+    app.dependency_overrides[get_db] = override_get_db
+    
+    async with AsyncClient(app=app, base_url="http://test") as test_client:
+        yield test_client
+    
+    app.dependency_overrides.clear()

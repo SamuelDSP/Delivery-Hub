@@ -1,67 +1,67 @@
-name: Python CI/tests
+name: Python CI
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
 
-        strategy:
-            matrix:
-                python-version: [3.10, 3.11, 3.12, 3.13]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        steps:
-            - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: ${{ matrix.python-version }}
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
-            - name: Cache Poetry
-              uses: actions/cache@v3
-              with:
-                    path: ~/.cache/pypoetry
-                    key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-poetry-
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
 
-            - name: Install Poetry
-              uses: snok/install-poetry@v1
+      - name: Install dependencies
+        run: poetry install --no-interaction
 
-            - name: Install dependencies
-              run: poetry install
+      - name: Set test environment variables
+        run: |
+          echo "DATABASE_URL=sqlite+aiosqlite:///:memory:" >> $GITHUB_ENV
+          echo "ENVIRONMENT=test" >> $GITHUB_ENV
+          echo "SECRET_KEY=test-secret-key-for-ci" >> $GITHUB_ENV
 
-            - name: Linting
-              run: |
-                poetry run flake8 .
-                poetry run black --check .
-                poetry run isort --check-only .
+      - name: Linting
+        run: |
+          poetry run flake8 app/ tests/
+          poetry run black --check app/ tests/
+          poetry run isort --check-only app/ tests/
 
-            - name: Unit Tests
-              run: poetry run pytest tests/unit
+      - name: Unit Tests
+        run: poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
 
-            - name: Integration Tests
-              run: poetry run pytest tests/integration
+      - name: Integration Tests
+        run: poetry run pytest tests/integration --cov=app --cov-report=term --cov-report=xml:coverage_integration.xml
 
-            - name: E2E Tests
-              if: github.ref == 'refs/heads/main'
-              run: poetry run pytest tests/e2e
+      - name: E2E Tests
+        if: github.ref == 'refs/heads/main'
+        run: poetry run pytest tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
 
-            - name: Run tests with coverage
-              run: |
-                poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
-                poetry run pytest tests/integration --cov=app --cov-report=term --cov-report=xml:coverage_integration.xml
-                poetry run pytest tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
-
-            - name: Upload coverage to Codecov
-              uses: codecov/codecov-action@v3
-              with:
-                  files: coverage_unit.xml,coverage_integration.xml,coverage_e2e.xml
-                  flags: unittests,integrationtests,e2etests
-                  name: codecov-${{ matrix.python-version }}
-                  fail_ci_if_error: true
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage_unit.xml,coverage_integration.xml,coverage_e2e.xml
+          flags: unittests,integrationtests,e2etests
+          name: codecov-${{ matrix.python-version }}
+          fail_ci_if_error: true
