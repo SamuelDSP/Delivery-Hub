@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pypoetry
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ hashFiles('backend/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
 
@@ -34,6 +34,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install dependencies
+        working-directory: backend
         run: poetry install --no-interaction
 
       - name: Set test environment variables
@@ -43,24 +44,29 @@ jobs:
           echo "SECRET_KEY=test-secret-key-for-ci" >> $GITHUB_ENV
 
       - name: Linting
+        working-directory: backend
         run: |
           poetry run flake8 app/ tests/
           poetry run black --check app/ tests/
           poetry run isort --check-only app/ tests/
 
       - name: Unit Tests
+        working-directory: backend
         run: poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
 
       - name: Integration Tests
+        working-directory: backend
         run: poetry run pytest tests/integration --cov=app --cov-report=term --cov-report=xml:coverage_integration.xml
 
       - name: E2E Tests
         if: github.ref == 'refs/heads/main'
+        working-directory: backend
         run: poetry run pytest tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
+          directory: backend
           files: coverage_unit.xml,coverage_integration.xml,coverage_e2e.xml
           flags: unittests,integrationtests,e2etests
           name: codecov-${{ matrix.python-version }}
