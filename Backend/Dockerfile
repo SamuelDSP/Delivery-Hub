@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY Backend/pyproject.toml Backend/poetry.lock ./
+COPY pyproject.toml poetry.lock ./
 
 RUN pip install poetry \
     && poetry config virtualenvs.create false \
