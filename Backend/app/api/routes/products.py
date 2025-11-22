@@ -4,10 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.deps import get_db
 from app.schemas.error_response import ErrorResponse
 from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
-from app.services.product import (create_product_service,
-                                  delete_product_service,
-                                  get_product_by_id_service,
-                                  update_product_service)
+from app.services.product import (
+    create_product_service,
+    delete_product_service,
+    get_product_by_id_service,
+    update_product_service,
+)
 
 router = APIRouter(prefix="/products", tags=["products"])
 
