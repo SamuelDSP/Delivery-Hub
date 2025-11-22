@@ -1,17 +1,11 @@
-FROM python:3.13-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential
+COPY Backend/pyproject.toml Backend/poetry.lock ./
 
-COPY pyproject.toml poetry.lock* /app/
+RUN pip install poetry && poetry install --no-interaction --no-ansi
 
-RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install --no-interaction --no-ansi
+COPY Backend ./
 
-COPY . .
-
-ENV PORT=8000
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
