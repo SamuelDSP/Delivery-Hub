@@ -2,9 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock README.md ./
-
 RUN apt-get update && apt-get install -y build-essential libpq-dev
+
+COPY pyproject.toml poetry.lock README.md ./
 
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
