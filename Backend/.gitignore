@@ -1,4 +1,4 @@
-# Ambientes e pacotes locais
+# Environment files and local packages
 __pycache__/
 *.py[cod]
 *.pyo
@@ -9,30 +9,33 @@ __pycache__/
 .env
 .env.*
 
-# Cache e logs
+# Cache and logs
 *.log
 .cache/
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Diretórios de build e distribuição
+# Build directories and distribution files
 build/
 dist/
 *.egg
 
-# Alembic e migrações temporárias
+# Alembic and temporary migration files
 migrations/__pycache__/
 alembic/__pycache__/
 
-# Configurações locais
+# Local Settings
 .vscode/
 .idea/
 *.sqlite3
 
-# Arquivos do Poetry
+# Poetry files
 poetry.lock
 
-# Arquivos do sistema
+# System files
 .DS_Store
 Thumbs.db
+
+# Dockerfile for future deploy purposes
+Dockerfile
