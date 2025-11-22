@@ -8,7 +8,7 @@ RUN pip install poetry \
     && poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
-COPY Backend ./
+COPY . .
 
 ENV PORT=8000
 
