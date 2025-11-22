@@ -1,6 +1,8 @@
 from fastapi import FastAPI
-from app.api.routes import products, users
 from starlette.middleware.cors import CORSMiddleware
+
+from app.api.routes import products, users
+
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Product Management System", version="1.0.0")
@@ -9,6 +11,7 @@ def create_app() -> FastAPI:
     include_routers(app)
 
     return app
+
 
 def add_cors_middleware(app: FastAPI):
     app.add_middleware(
@@ -19,8 +22,10 @@ def add_cors_middleware(app: FastAPI):
         allow_headers=["*"],
     )
 
+
 def include_routers(app: FastAPI):
     app.include_router(products.router)
     app.include_router(users.router)
+
 
 app = create_app()
