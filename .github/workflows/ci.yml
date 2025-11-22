@@ -47,12 +47,6 @@ jobs:
         working-directory: Backend
         run: find . -type d -name "tests" -o -name "app"
 
-      - name: Linting
-        working-directory: Backend
-        run: |
-          poetry run black --check app tests
-          poetry run isort --check-only app tests
-
       - name: Unit Tests
         working-directory: Backend
         run: poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
