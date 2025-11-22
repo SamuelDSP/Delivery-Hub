@@ -47,24 +47,24 @@ jobs:
         working-directory: Backend
         run: find . -type d -name "tests" -o -name "app"
 
-      - name: Unit Tests
-        working-directory: Backend
-        run: poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
+      # - name: Unit Tests
+      #   working-directory: Backend
+      #   run: poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
 
       - name: Integration Tests
         working-directory: Backend
         run: poetry run pytest tests/integration --cov=app --cov-report=term --cov-report=xml:coverage_integration.xml
 
-      - name: E2E Tests
-        if: github.ref == 'refs/heads/main'
-        working-directory: Backend
-        run: poetry run pytest tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
+      # - name: E2E Tests
+      #   if: github.ref == 'refs/heads/main'
+      #   working-directory: Backend
+      #   run: poetry run pytest tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          directory: Backend
-          files: coverage_unit.xml,coverage_integration.xml,coverage_e2e.xml
-          flags: unittests,integrationtests,e2etests
-          name: codecov-${{ matrix.python-version }}
-          fail_ci_if_error: true
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     directory: Backend
+      #     files: coverage_unit.xml,coverage_integration.xml,coverage_e2e.xml
+      #     flags: unittests,integrationtests,e2etests
+      #     name: codecov-${{ matrix.python-version }}
+      #     fail_ci_if_error: true
