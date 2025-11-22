@@ -49,16 +49,16 @@ jobs:
 
       # - name: Unit Tests
       #   working-directory: Backend
-      #   run: poetry run pytest tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
+      #   run: poetry run pytest app/tests/unit --cov=app --cov-report=term --cov-report=xml:coverage_unit.xml
 
       - name: Integration Tests
         working-directory: Backend
-        run: poetry run pytest app/tests/integration -v
+        run: poetry run pytest app/tests/integration --cov=app --cov-report=term --cov-report=xml:coverage_integration.xml
 
       # - name: E2E Tests
       #   if: github.ref == 'refs/heads/main'
       #   working-directory: Backend
-      #   run: poetry run pytest tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
+      #   run: poetry run pytest app/tests/e2e --cov=app --cov-report=term --cov-report=xml:coverage_e2e.xml
 
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v3
