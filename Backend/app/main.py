@@ -7,6 +7,10 @@ from app.api.routes import products, users
 def create_app() -> FastAPI:
     app = FastAPI(title="Product Management System", version="1.0.0")
 
+    @app.get("/")
+    def health_check():
+        return {"status": "ok"}
+
     add_cors_middleware(app)
     include_routers(app)
 
