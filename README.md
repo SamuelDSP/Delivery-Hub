@@ -29,7 +29,7 @@ It is designed to demonstrate best practices in backend development, API design,
 
 To run the project locally, follow the setup instructions inside the backend folder:
 
-**[Backend Setup Guide](./backend/README.md)**
+**[Backend Setup Guide](./Backend/README.md)**
 
 
 ## Features
