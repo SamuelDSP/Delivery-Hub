@@ -109,6 +109,8 @@ The project is still under development. Here are some planned improvements:
 - Integrate with a caching layer (e.g., Redis)
 - Add more comprehensive API tests
 - Implement logging for better monitoring
+- Dockerize the application for easier deployment
+
 
 ## License
 This project is licensed under the MIT License.
