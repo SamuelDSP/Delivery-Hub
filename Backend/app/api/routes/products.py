@@ -9,6 +9,7 @@ from app.services.product import (
     delete_product_service,
     get_product_by_id_service,
     update_product_service,
+    get_all_products_service,
 )
 
 router = APIRouter(prefix="/products", tags=["products"])
@@ -131,3 +132,34 @@ async def delete_product_endpoint(product_id: int, db: AsyncSession = Depends(ge
 
     if not delete:
         raise HTTPException(status_code=404, detail="Product not found")
+
+
+@router.get("/",
+            response_model=list[ProductOut],
+            responses ={
+                200: {
+                    "description": "List of all products",
+                    "content": {
+                        "application/json": {
+                            "example": [
+                                {
+                                    "id": 1,
+                                    "name": "Product 1",
+                                    "description": "Description of Product A",
+                                    "price": 14.99,
+                                    "stock": 100
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Product 2",
+                                    "description": "Description of Product B",
+                                    "price": 15.49,
+                                    "stock": 50
+                                }
+                            ]
+                        }
+                    }
+                },
+            })
+async def get_all_products_endpoint(db: AsyncSession = Depends(get_db)):
+    return await get_all_products_service(db)

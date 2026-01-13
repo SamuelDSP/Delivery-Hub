@@ -1,3 +1,4 @@
+from select import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -54,3 +55,9 @@ async def delete_product_service(db: AsyncSession, product_id: int) -> bool:
     await db.delete(product)
     await db.commit()
     return True
+
+
+async def get_all_products_service(db: AsyncSession) -> list[ProductOut]:
+    result = await db.execute(select(Product))
+    products = result.scalars().all()
+    return products
