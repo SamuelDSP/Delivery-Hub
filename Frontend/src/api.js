@@ -54,10 +54,11 @@ export async function deleteProduct(productId) {
 
 export async function getProducts() {
   const response = await fetch(`${API_URL}/products/`)
-
   if (!response.ok) {
+    if (response.status === 503) {
+      throw new Error('Server is waking up. Please try again.')
+    }
     throw new Error('Failed to fetch products')
   }
-
   return await response.json()
 }
