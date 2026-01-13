@@ -1,4 +1,4 @@
-const API_URL = 'https://productmanagementsystem-81hs.onrender.com'
+const API_URL = import.meta.env.VITE_API_URL
 
 export async function createProduct(product) {
   const response = await fetch(`${API_URL}/products/`, {//só muda essas rotas caso mude a rota no backend
