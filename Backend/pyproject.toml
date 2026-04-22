@@ -21,6 +21,9 @@ python-dotenv = ">=1.1.1,<2.0.0"
 alembic = ">=1.17.0,<2.0.0"
 psycopg2-binary = "^2.9.11"
 aiosqlite = "^0.21.0"
+python-jose = "^3.5.0"
+passlib = "^1.7.4"
+bcrypt = "^5.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.4.2,<9.0.0"
