@@ -1,2 +1,8 @@
-class email_exists_exception(Exception):
+class EmailExistsException(Exception):
+    pass
+
+class UsernameExistsException(Exception):
+    pass
+
+class InvalidCredentialsException(Exception):
     pass

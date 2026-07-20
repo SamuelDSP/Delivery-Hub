@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, Integer, String, text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-
+from app.core.enums import UserRole
 
 class User(Base):
     __tablename__ = "users"
@@ -16,7 +16,8 @@ class User(Base):
         String, unique=True, index=True, nullable=False
     )
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
-    role: Mapped[str] = mapped_column(String, default="user", nullable=False)
+    role: Mapped[UserRole] = mapped_column(default=UserRole.CUSTOMER, nullable=False)
+    products = relationship("Product", back_populates="seller")
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(

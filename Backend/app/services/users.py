@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,3 +22,30 @@ async def get_user_by_email_service(db: AsyncSession, email: str) -> User | None
         return None
 
     return user
+
+async def get_user_by_identifier_service(
+    db: AsyncSession,
+    identifier: str,
+) -> User | None:
+
+    result = await db.execute(
+        select(User).where(
+            or_(
+                User.email == identifier,
+                User.username == identifier,
+            )
+        )
+    )
+
+    return result.scalars().first()
+
+async def get_user_by_username_service(
+    db: AsyncSession,
+    username: str,
+) -> User | None:
+    result = await db.execute(
+        select(User).where(User.username == username)
+    )
+
+    return result.scalars().first()
+

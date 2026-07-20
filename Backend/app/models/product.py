@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
@@ -16,6 +16,8 @@ class Product(Base):
     description: Mapped[str] = mapped_column(String, index=True, nullable=True)
     price: Mapped[float] = mapped_column(Float, nullable=False)
     stock: Mapped[int] = mapped_column(Integer, nullable=False)
+    seller_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    seller = relationship("User", back_populates="products")
 
     created_by_user_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("users.id"), nullable=True

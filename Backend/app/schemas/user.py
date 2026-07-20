@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
+from app.core.enums import UserRole
 
 
 class UserBase(BaseModel):
@@ -11,11 +12,11 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=10, example="strongpassword123")
-
+    role: UserRole
 
 class UserOut(UserBase):
     id: int
-    role: str
+    role: UserRole
     created_at: datetime
     updated_at: datetime
 
