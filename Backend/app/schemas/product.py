@@ -26,9 +26,9 @@ class ProductCreate(ProductBase):
 
 class ProductOut(ProductBase):
     id: int
+    seller_id: int
     created_at: datetime
     updated_at: datetime
-    created_by_user_id: Optional[int] = None
 
     photo_url: Optional[str] = None
     photo_mime_type: Optional[str] = None

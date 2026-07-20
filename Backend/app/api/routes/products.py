@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.deps import get_current_admin_or_seller
 from app.db.deps import get_db
 from app.schemas.error_response import ErrorResponse
 from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
+from app.schemas.user import User
 from app.services.product import (
     create_product_service,
     delete_product_service,
@@ -35,9 +37,10 @@ router = APIRouter(prefix="/products", tags=["products"])
     },
 )
 async def create_product_endpoint(
-    product: ProductCreate, db: AsyncSession = Depends(get_db)
+    product: ProductCreate, db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin_or_seller),
 ):
-    product = await create_product_service(db, product)
+    product = await create_product_service(db, product, current_user)
 
     if product is None:
         raise HTTPException(
@@ -97,12 +100,23 @@ async def get_product_by_id_endpoint(
     },
 )
 async def update_product_endpoint(
-    product_id: int, product_in: ProductUpdate, db: AsyncSession = Depends(get_db)
+    product_id: int,
+    product_in: ProductUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin_or_seller),
 ):
-    updated_product = await update_product_service(db, product_id, product_in)
+    updated_product = await update_product_service(
+        db,
+        product_id,
+        product_in,
+        current_user,
+    )
 
-    if updated_product == None:
-        raise HTTPException(status_code=404, detail="Product not found")
+    if updated_product is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found",
+        )
 
     return updated_product
 
@@ -127,11 +141,22 @@ async def update_product_endpoint(
         },
     },
 )
-async def delete_product_endpoint(product_id: int, db: AsyncSession = Depends(get_db)):
-    delete = await delete_product_service(db, product_id)
+async def delete_product_endpoint(
+    product_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin_or_seller),
+):
+    deleted = await delete_product_service(
+        db,
+        product_id,
+        current_user,
+    )
 
-    if not delete:
-        raise HTTPException(status_code=404, detail="Product not found")
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found",
+        )
 
 
 @router.get("/",
