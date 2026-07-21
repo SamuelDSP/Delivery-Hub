@@ -3,9 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_admin_or_seller
 from app.db.deps import get_db
+from app.models.user import User
 from app.schemas.error_response import ErrorResponse
 from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
-from app.schemas.user import User
 from app.services.product import (
     create_product_service,
     delete_product_service,

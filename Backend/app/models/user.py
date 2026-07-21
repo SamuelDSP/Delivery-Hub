@@ -17,7 +17,11 @@ class User(Base):
     )
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     role: Mapped[UserRole] = mapped_column(default=UserRole.CUSTOMER, nullable=False)
-    products = relationship("Product", back_populates="seller")
+    products = relationship(
+        "Product",
+        back_populates="seller",
+        foreign_keys="Product.seller_id",
+    )
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(

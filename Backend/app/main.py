@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.api.routes import products, users
+from app.api.auth import router as auth_router
+from app.api.routes import orders, products, users
 
 
 def create_app() -> FastAPI:
@@ -28,7 +29,9 @@ def add_cors_middleware(app: FastAPI):
 
 
 def include_routers(app: FastAPI):
+    app.include_router(auth_router.router)
     app.include_router(products.router)
+    app.include_router(orders.router)
     app.include_router(users.router)
 
 

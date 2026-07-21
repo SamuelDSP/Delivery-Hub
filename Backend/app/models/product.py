@@ -17,9 +17,13 @@ class Product(Base):
     price: Mapped[float] = mapped_column(Float, nullable=False)
     stock: Mapped[int] = mapped_column(Integer, nullable=False)
     seller_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    seller = relationship("User", back_populates="products")
+    seller = relationship(
+        "User",
+        back_populates="products",
+        foreign_keys=[seller_id],
+    )
 
-    created_by_user_id: Mapped[int] = mapped_column(
+    created_by_user_id: Mapped[int | None] = mapped_column(
         Integer, ForeignKey("users.id"), nullable=True
     )
 

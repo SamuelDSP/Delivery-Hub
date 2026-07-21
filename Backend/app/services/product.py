@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.models.product import Product
 from app.models.user import User, UserRole
@@ -24,7 +25,12 @@ async def create_product_service(
 
 
 async def get_product_by_id_service(db: AsyncSession, product_id: int) -> ProductOut:
-    product = await db.get(Product, product_id)
+    result = await db.execute(
+        select(Product)
+        .options(selectinload(Product.seller))
+        .where(Product.id == product_id)
+    )
+    product = result.scalars().first()
 
     if product is None:
         return None
@@ -92,6 +98,10 @@ async def delete_product_service(
 
 
 async def get_all_products_service(db: AsyncSession) -> list[ProductOut]:
-    result = await db.execute(select(Product))
+    result = await db.execute(
+        select(Product)
+        .options(selectinload(Product.seller))
+        .order_by(Product.created_at.desc())
+    )
     products = result.scalars().all()
     return products
