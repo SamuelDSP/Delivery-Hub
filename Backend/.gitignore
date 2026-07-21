@@ -30,8 +30,6 @@ alembic/__pycache__/
 .idea/
 *.sqlite3
 
-# Poetry files
-poetry.lock
 
 # System files
 .DS_Store
