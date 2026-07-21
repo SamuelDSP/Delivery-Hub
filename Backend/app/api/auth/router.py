@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.auth import service
+from app.api.deps import get_current_user
 from app.db.deps import get_db
 
 from app.schemas.user import UserCreate
 from app.schemas.auth import UserLogin, TokenOut
+from app.schemas.user import UserOut
 from app.api.auth.service import register_user_service, login_user_service
 from app.core.exceptions import EmailExistsException, UsernameExistsException, InvalidCredentialsException
 
@@ -44,3 +45,13 @@ async def login_endpoint(
             status_code=401,
             detail="Invalid username/email or password",
         )
+
+
+@router.get("/me", response_model=UserOut)
+async def get_me_endpoint(current_user=Depends(get_current_user)):
+    return current_user
+
+
+@router.post("/logout")
+async def logout_endpoint():
+    return {"detail": "Logged out"}

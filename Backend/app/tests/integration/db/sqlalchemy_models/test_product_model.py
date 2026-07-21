@@ -1,17 +1,34 @@
 import pytest
 from sqlalchemy import select
 
+from app.core.enums import UserRole
 from app.models.product import Product
+from app.models.user import User
+
+
+async def create_seller(db_session, username="seller"):
+    seller = User(
+        username=username,
+        email=f"{username}@example.com",
+        hashed_password="hashed-password",
+        role=UserRole.SELLER,
+    )
+    db_session.add(seller)
+    await db_session.flush()
+    await db_session.refresh(seller)
+    return seller
 
 
 @pytest.mark.asyncio
 async def test_create_product(db_session):
+    seller = await create_seller(db_session)
 
     product_data = {
         "name": "iPhone 15",
         "description": "Smartphone premium",
         "price": 4999.99,
         "stock": 50,
+        "seller_id": seller.id,
     }
 
     new_product = Product(**product_data)
@@ -23,13 +40,21 @@ async def test_create_product(db_session):
     assert new_product.name == "iPhone 15"
     assert new_product.price == 4999.99
     assert new_product.stock == 50
+    assert new_product.seller_id == seller.id
     assert new_product.created_at is not None
 
 
 @pytest.mark.asyncio
 async def test_product_validation(db_session):
+    seller = await create_seller(db_session)
 
-    product = Product(name="Product", description="Desc", price=100.0, stock=10)
+    product = Product(
+        name="Product",
+        description="Desc",
+        price=100.0,
+        stock=10,
+        seller_id=seller.id,
+    )
     db_session.add(product)
     await db_session.flush()
 
@@ -39,9 +64,14 @@ async def test_product_validation(db_session):
 
 @pytest.mark.asyncio
 async def test_product_relationships(db_session):
+    seller = await create_seller(db_session)
 
     product = Product(
-        name="Product with Category", description="Desc", price=50.0, stock=5
+        name="Product with Category",
+        description="Desc",
+        price=50.0,
+        stock=5,
+        seller_id=seller.id,
     )
     db_session.add(product)
     await db_session.flush()
@@ -51,15 +81,35 @@ async def test_product_relationships(db_session):
 
     assert product_from_db is not None
     assert product_from_db.name == "Product with Category"
+    assert product_from_db.seller_id == seller.id
 
 
 @pytest.mark.asyncio
 async def test_multiple_products(db_session):
+    seller = await create_seller(db_session)
 
     products = [
-        Product(name="Product A", description="Desc A", price=10.0, stock=5),
-        Product(name="Product B", description="Desc B", price=20.0, stock=3),
-        Product(name="Product C", description="Desc C", price=30.0, stock=8),
+        Product(
+            name="Product A",
+            description="Desc A",
+            price=10.0,
+            stock=5,
+            seller_id=seller.id,
+        ),
+        Product(
+            name="Product B",
+            description="Desc B",
+            price=20.0,
+            stock=3,
+            seller_id=seller.id,
+        ),
+        Product(
+            name="Product C",
+            description="Desc C",
+            price=30.0,
+            stock=8,
+            seller_id=seller.id,
+        ),
     ]
 
     for product in products:

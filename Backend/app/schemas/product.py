@@ -24,6 +24,14 @@ class ProductCreate(ProductBase):
     )
 
 
+class ProductSellerOut(BaseModel):
+    id: int
+    username: str
+    email: str
+
+    model_config = {"from_attributes": True}
+
+
 class ProductOut(ProductBase):
     id: int
     seller_id: int
@@ -38,6 +46,7 @@ class ProductOut(ProductBase):
     photo_hash: Optional[str] = None
     photo_file_name: Optional[str] = None
     photo_thumbnail_url: Optional[str] = None
+    seller: Optional[ProductSellerOut] = None
 
     model_config = {"from_attributes": True}
 
