@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api/backend'
 
 function getToken() {
   if (typeof window === 'undefined') {
@@ -19,7 +19,8 @@ async function request(path, options = {}) {
     headers.Authorization = `Bearer ${token}`
   }
 
-  const response = await fetch(`${API_URL}${path}`, {
+  const url = `${API_URL}${path}`
+  const response = await fetch(url, {
     ...options,
     headers,
   }).catch(() => {
