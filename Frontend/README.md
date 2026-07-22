@@ -1,18 +1,172 @@
-# React + Vite
+# Delivery Hub Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for **Delivery Hub**, built with **Next.js**, **React** and **TypeScript**.
 
-Currently, two official plugins are available:
+The frontend provides a modern interface for customers to browse products and place orders, while sellers can manage their own products through an authenticated dashboard.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+# Preview
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+![Customer Catalog](docs/images/customer-catalog.png)
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+# Overview
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The frontend communicates with the FastAPI backend through REST APIs and provides different user experiences depending on the authenticated user's role.
+
+Implemented interfaces include:
+
+- Customer marketplace
+- User authentication
+- Seller dashboard
+- Product management
+- Order workflow
+
+---
+
+# Technologies
+
+- Next.js
+- React
+- TypeScript
+- App Router
+- Fetch API
+
+---
+
+# Features
+
+### Authentication
+
+- User registration
+- Login
+- Logout
+- JWT authentication
+
+---
+
+### Marketplace
+
+- Browse products
+- Product details
+- Responsive product catalog
+
+---
+
+### Seller Dashboard
+
+- Create products
+- Update products
+- Delete products
+- Manage inventory
+
+---
+
+### Orders
+
+- Customer checkout flow
+- Order management
+- Payment integration (coming soon)
+
+---
+
+# Application Structure
+
+```
+Frontend
+│
+├── app
+├── components
+├── hooks
+├── services
+├── types
+├── public
+└── README.md
+```
+
+---
+
+# Design Decisions
+
+The frontend was developed following a component-based architecture with a clear separation between presentation and API communication.
+
+Main architectural decisions:
+
+- Next.js App Router
+- Reusable React components
+- Service layer for API communication
+- TypeScript for type safety
+- Environment-based configuration
+- JWT authentication flow
+
+---
+
+# Environment Variables
+
+Create a `.env.local` file.
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+---
+
+# Running Locally
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Start the development server
+
+```bash
+npm run dev
+```
+
+The application will be available at
+
+```
+http://localhost:3000
+```
+
+---
+
+# Backend
+
+The frontend communicates with the Delivery Hub backend through the REST API.
+
+Backend documentation:
+
+**[Backend README](../Backend/README.md)**
+
+---
+
+# Deployment
+
+| Service | Platform |
+|----------|----------|
+| Frontend | Vercel |
+| Backend | Render |
+| Database | Supabase |
+
+---
+
+# Related Documentation
+
+Project overview:
+
+**[Delivery Hub](../README.md)**
+
+Backend documentation:
+
+**[Backend README](../Backend/README.md)**
+
+---
+
+# License
+
+MIT License

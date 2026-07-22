@@ -1,116 +1,281 @@
-# Product Management System
+# Delivery Hub Backend
 
-This is the backend service for the Product Management System, built using Python and FastAPI. It provides RESTful APIs to manage products, including creating, reading, updating, and deleting product information.
+Backend service for **Delivery Hub**, a full-stack delivery marketplace built with FastAPI.
 
-## Technologies Used
+The backend provides authentication, authorization, product management and order management through a RESTful API following a layered architecture and modern backend development practices.
 
-- Python 3.11.9
+---
+
+# Overview
+
+The backend is responsible for:
+
+- User authentication
+- Role-based authorization
+- Product management
+- Order management
+- Business rules
+- Database persistence
+- API documentation
+
+---
+
+# Architecture
+
+The project follows a layered architecture to separate responsibilities.
+
+```
+                 FastAPI Routers
+                        │
+                        ▼
+                 Dependencies
+                        │
+                        ▼
+                   Services
+                        │
+                        ▼
+                SQLAlchemy Models
+                        │
+                        ▼
+                  PostgreSQL
+```
+
+Each layer has a single responsibility:
+
+| Layer | Responsibility |
+|-------|----------------|
+| Routers | HTTP endpoints |
+| Dependencies | Authentication & Authorization |
+| Services | Business logic |
+| Models | Database entities |
+| Schemas | Request & Response validation |
+| Database | Persistence |
+
+---
+
+## Design Decisions
+
+Some architectural decisions adopted in this project:
+
+- Layered architecture
+- Service layer for business rules
+- SQLAlchemy ORM
+- JWT authentication
+- Dependency-based authorization
+- Database migrations with Alembic
+- Separation between Models and Schemas
+- Role-based access control
+
+# Technologies
+
+- Python 3.11
 - FastAPI
 - SQLAlchemy
 - PostgreSQL
-- Alembic (for database migrations)
-- Pydantic (for data validation)
-- Uvicorn (ASGI server)
-- Poetry (for dependency management)
-- Pytest (for testing)
-- Github Actions (for CI/CD)
-- Swagger UI (for API documentation)
+- Alembic
+- Pydantic
+- JWT
+- Passlib
+- Poetry
+- Pytest
+- GitHub Actions
 
-## Functionalities
+---
 
-- Create new products
-- Read product information
-- Update existing products
+# Authentication
+
+Authentication is implemented using JWT.
+
+Implemented features:
+
+- User registration
+- Login
+- Password hashing with bcrypt
+- JWT token generation
+- Protected endpoints
+- Current user dependency
+
+---
+
+# Authorization
+
+Role-Based Access Control (RBAC)
+
+Available roles:
+
+- Customer
+- Seller
+- Admin
+
+Authorization is implemented using reusable FastAPI dependencies.
+
+Examples:
+
+- Customers cannot create products.
+- Sellers manage only their own products.
+- Admins have unrestricted access.
+
+---
+
+# Product Management
+
+Implemented features:
+
+- Create products
+- Update products
 - Delete products
+- Product ownership validation
+- Product listing
+- Product details
 
-## Architecture
+---
 
-The application follows a layered architecture:
-- Presentation Layer (FastAPI)
-- Business Logic Layer (Pydantic models and service logic)
-- Data Access Layer (SQLAlchemy ORM)
-- Database Layer (PostgreSQL)
+# Order Management
 
-## Setup Instructions
+Current features include:
 
-### 1. Clone the repository
+- Customer orders
+- Seller order management
+- Order status tracking
 
-Use git clone in the following [Repository](https://github.com/SamuelDSP/ProductManagementSystem/tree/main)
-then navigate to the Backend directory by running:
-```bash
-cd Backend
+Payment integration will be added in a future release.
+
+---
+
+# Database
+
+The application uses PostgreSQL together with SQLAlchemy ORM.
+
+Database schema changes are managed through Alembic migrations.
+
+---
+
+# Project Structure
+
+```
+Backend
+│
+├── alembic
+│
+├── app
+│   ├── api
+│   ├── core
+│   ├── database
+│   ├── enums
+│   ├── models
+│   ├── schemas
+│   ├── services
+│   └── tests
+│
+├── Dockerfile
+├── pyproject.toml
+└── README.md
 ```
 
+---
 
-### 2. Install dependencies using Poetry
+# Local Development
 
-Make sure you have Poetry installed. Then run:
+## Install dependencies
+
 ```bash
 poetry install
 ```
 
+---
 
-### 3. Set up the PostgreSQL database
+## Environment Variables
 
-Create a PostgreSQL database for the application. You can use the following commands to create a new database:
-```sql
-CREATE DATABASE YourDatabaseName;
-CREATE DATABASE YourTestDatabaseName;
+Create a `.env` file inside the Backend folder.
+
+```env
+DATABASE_URL=
+DATABASE_TEST_URL=
+SECRET_KEY=
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
+---
 
-Then,
-Create a environment file `.env` in the Backend directory with the following content (note: replace placeholders with actual values):
-```plaintext
-DATABASE_URL=postgresql+asyncpg://username:password@localhost:5432/YourDatabaseName
-```
-```plaintext
-TEST_DATABASE_URL=postgresql+asyncpg://username:password@localhost:5432/YourTestDatabaseName
-```
+## Run Migrations
 
-
-### 4. Run database migrations
-
-Run the following command to apply database migrations:
 ```bash
 poetry run alembic upgrade head
 ```
 
+---
 
-### 5. Start the FastAPI server
+## Start the Server
 
-Run the following command to start the server:
 ```bash
 poetry run uvicorn app.main:app --reload
 ```
-The server will be accessible at [http://localhost:8000](http://localhost:8000).
 
+The API will be available at
 
-## Testing
+```
+http://localhost:8000
+```
 
-To run the tests, use the following command:
+---
+
+# Testing
+
+Run all tests:
+
 ```bash
 poetry run pytest
 ```
 
-## API Documentation
+---
 
-Swagger UI is available at [https://productmanagementsystem-81hs.onrender.com/docs](https://productmanagementsystem-81hs.onrender.com/docs) for interactive API documentation.
+# API Documentation
 
-![Swagger UI](docs/images/swagger.png)
+Swagger UI
 
+```
+/docs
+```
 
-## Future improvements
+ReDoc
 
-The project is still under development. Here are some planned improvements:
+```
+/redoc
+```
 
-- Implement user authentication and authorization (e.g., JWT)
-- Add product categories and filtering capabilities
-- Integrate with a caching layer (e.g., Redis)
-- Add more comprehensive API tests
-- Implement logging for better monitoring
-- Dockerize the application for easier deployment
+---
 
+# Deployment
 
-## License
-This project is licensed under the MIT License.
+| Service | Platform |
+|----------|----------|
+| Backend | Render |
+| Database | Supabase |
+
+---
+
+# Future Improvements
+
+- Payment gateway integration
+- Docker Compose
+- Redis caching
+- Email notifications
+- Monitoring and logging
+
+---
+
+# Related Documentation
+
+Return to the project overview:
+
+➡️ **[Delivery Hub](../README.md)**
+
+Frontend documentation:
+
+➡️ **[Frontend README](../Frontend/README.md)**
+
+---
+
+# License
+
+MIT License

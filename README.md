@@ -1,65 +1,188 @@
-# Product Management System
+# Delivery Hub
 
-This project is a full-stack system for managing products, built with a modern and scalable architecture.
-It is designed to demonstrate best practices in backend development, API design, and project organization.
+A full-stack delivery marketplace built with **FastAPI**, **Next.js** and **PostgreSQL**.
 
+Delivery Hub is a modern web application where customers can browse products and place orders while sellers manage their own storefronts through a secure role-based platform.
 
-## Project Structure
+Designed as a production-ready solution, it focuses on clean architecture, authentication, authorization, scalable backend design and production-ready deployment.
 
-- **backend/** – FastAPI application responsible for the API, business logic and database access  
-- **frontend/** – Frontend application (current implementation)
+---
 
+## Preview
 
-### API Documentation Preview
+### Home Page
 
-![API Documentation Preview](Backend/docs/images/swagger.png)
+![Home Page](docs/images/home.png)
 
+---
 
-## Technologies
+### Customer Catalog
 
-- Python (FastAPI)
-- PostgreSQL
-- SQLAlchemy
-- Alembic
-- Poetry
-- GitHub Actions (CI/CD)
+![Customer Catalog](docs/images/customer-catalog.png)
 
+---
 
-## Getting Started
+### User Registration
 
-To run the project locally, follow the setup instructions inside the backend folder:
+![User Registration](docs/images/register.png)
 
-**[Backend Setup Guide](./Backend/README.md)**
+---
 
+### Seller Dashboard
 
-## Features
+![Seller Dashboard](docs/images/dashboard.png)
 
-- Create, read, update and delete products
-- List products with pagination
-- Retrieve product details by ID
-- Data validation and error handling
+---
 
+### API Documentation
 
-## Technical Highlights
+![Swagger](docs/images/swagger.png)
 
-- RESTful API built with FastAPI
-- Clean architecture and separation of concerns
+---
+
+## Live Demo
+
+Application:
+
+https://delivery-hub-spot.vercel.app
+
+API Documentation:
+
+https://productmanagementsystem-81hs.onrender.com/docs
+
+---
+
+# Features
+
+### Authentication
+
+- User registration
+- Secure login
+- JWT authentication
+- Password hashing with bcrypt
+- Protected routes
+
+### Authorization
+
+Role-Based Access Control (RBAC)
+
+- Customer
+- Seller
+- Admin
+
+Business rules are enforced through reusable FastAPI dependencies and service-layer validation.
+
+### Marketplace
+
+- Browse products
+- Product details
+- Seller storefronts
+- Customer order workflow
+- Seller product management
+
+### Product Management
+
+- Create products
+- Update products
+- Delete products
+- Product ownership validation
+- Inventory management
+
+### Backend Engineering
+
+- Layered architecture
+- RESTful API
 - Database migrations with Alembic
-- Automated testing with Pytest
-- Interactive API documentation with Swagger
+- SQLAlchemy ORM
+- Input validation with Pydantic
+- Automated tests
+- CI/CD with GitHub Actions
 
+---
 
-## Project Status
+# Technology Stack
 
-This project is under active development.  
-Future improvements include:
-- Frontend interface
-- Authentication and authorization (JWT)
-- Role-based access control
-- Caching and performance improvements
-- Dockerization and container orchestration
+| Backend | Frontend | Infrastructure |
+|----------|-----------|----------------|
+| FastAPI | Next.js | Render |
+| SQLAlchemy | React | Vercel |
+| PostgreSQL | TypeScript | Supabase |
+| Alembic | App Router | GitHub Actions |
+| Pydantic | Fetch API | Poetry |
+| JWT | | Pytest |
 
+---
 
-## License
+# Architecture
+
+```text
+                    Next.js Frontend
+                           │
+                           ▼
+                    FastAPI REST API
+                           │
+         ┌─────────────────┴─────────────────┐
+         ▼                                   ▼
+ Authentication & Authorization       Business Services
+         │                                   │
+         └─────────────────┬─────────────────┘
+                           ▼
+                    PostgreSQL Database
+                         (Supabase)
+```
+
+---
+
+# Repository Structure
+
+```text
+Delivery-Hub
+│
+├── Backend
+│   ├── app
+│   ├── alembic
+│   ├── tests
+│   └── README.md
+│
+├── Frontend
+│   ├── app
+│   ├── components
+│   ├── services
+│   └── README.md
+│
+├── docs
+│   └── images
+│
+└── README.md
+```
+
+---
+
+# Documentation
+
+Detailed documentation for each part of the project is available in:
+
+- **Backend/README.md**
+- **Frontend/README.md**
+
+---
+
+# Roadmap
+
+The project continues to evolve with new marketplace features.
+
+Planned improvements include:
+
+- Payment gateway integration
+- Product search and filtering
+- Seller profile pages
+- Order tracking
+- Email notifications
+- Docker support
+- Redis caching
+
+---
+
+# License
 
 This project is licensed under the MIT License.
