@@ -12,31 +12,31 @@ Designed as a production-ready solution, it focuses on clean architecture, authe
 
 ### Home Page
 
-![Home Page](docs/images/home.png)
+![Home Page](Backend/docs/images/home.png)
 
 ---
 
 ### Customer Catalog
 
-![Customer Catalog](docs/images/customer-catalog.png)
+![Customer Catalog](Backend/docs/images/customer-catalog.png)
 
 ---
 
 ### User Registration
 
-![User Registration](docs/images/register.png)
+![User Registration](Backend/docs/images/register.png)
 
 ---
 
 ### Seller Dashboard
 
-![Seller Dashboard](docs/images/dashboard.png)
+![Seller Dashboard](Backend/docs/images/dashboard.png)
 
 ---
 
 ### API Documentation
 
-![Swagger](docs/images/swagger.png)
+![Swagger](Backend/docs/images/swagger.png)
 
 ---
 
