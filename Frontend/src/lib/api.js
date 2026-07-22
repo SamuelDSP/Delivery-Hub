@@ -1,4 +1,5 @@
-const API_URL = '/api/backend'
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || '/api/backend').replace(/\/$/, '')
+const REQUEST_TIMEOUT_MS = 15000
 
 function getToken() {
   if (typeof window === 'undefined') {
@@ -9,6 +10,8 @@ function getToken() {
 }
 
 async function request(path, options = {}) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
   const token = getToken()
   const headers = {
     'Content-Type': 'application/json',
@@ -20,12 +23,23 @@ async function request(path, options = {}) {
   }
 
   const url = `${API_URL}${path}`
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  }).catch(() => {
+  let response
+
+  try {
+    response = await fetch(url, {
+      ...options,
+      headers,
+      signal: controller.signal,
+    })
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('O servidor demorou para responder. Tente novamente.')
+    }
+
     throw new Error('Nao foi possivel conectar ao servidor.')
-  })
+  } finally {
+    clearTimeout(timeoutId)
+  }
 
   if (response.status === 204) {
     return null
