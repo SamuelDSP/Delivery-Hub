@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api/backend'
+const API_URL = '/api/backend'
 
 function getToken() {
   if (typeof window === 'undefined') {

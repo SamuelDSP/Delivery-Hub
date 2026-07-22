@@ -29,10 +29,16 @@ def add_cors_middleware(app: FastAPI):
 
 
 def include_routers(app: FastAPI):
-    app.include_router(auth_router.router)
-    app.include_router(products.router)
-    app.include_router(orders.router)
-    app.include_router(users.router)
+    include_api_routers(app)
+    include_api_routers(app, prefix="/api")
+    include_api_routers(app, prefix="/api/backend")
+
+
+def include_api_routers(app: FastAPI, prefix: str = ""):
+    app.include_router(auth_router.router, prefix=prefix)
+    app.include_router(products.router, prefix=prefix)
+    app.include_router(orders.router, prefix=prefix)
+    app.include_router(users.router, prefix=prefix)
 
 
 app = create_app()
