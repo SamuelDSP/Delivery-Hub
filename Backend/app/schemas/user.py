@@ -14,6 +14,7 @@ class UserCreate(UserBase):
     password: str = Field(
         ...,
         min_length=10,
+        max_length=72,
         example="strongpassword123!",
     )
     role: UserRole
@@ -21,6 +22,9 @@ class UserCreate(UserBase):
     @field_validator("password")
     @classmethod
     def validate_password(cls, password: str) -> str:
+        if len(password.encode("utf-8")) > 72:
+            raise ValueError("Password cannot be longer than 72 bytes")
+
         if password.isalnum():
             raise ValueError("Password must contain at least one special character")
 
@@ -38,4 +42,9 @@ class UserOut(UserBase):
 class UserUpdate(BaseModel):
     username: Optional[str] = Field(None, example="john_moe_updated")
     email: Optional[str] = Field(None, example="johnmoe@gmail.com")
-    password: Optional[str] = Field(None, min_length=10, example="newstrongpassword123")
+    password: Optional[str] = Field(
+        None,
+        min_length=10,
+        max_length=72,
+        example="newstrongpassword123!",
+    )
