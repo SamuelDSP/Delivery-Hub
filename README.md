@@ -162,8 +162,8 @@ Delivery-Hub
 
 Detailed documentation for each part of the project is available in:
 
-- **Backend/README.md**
-- **Frontend/README.md**
+- [Backend Documentation](Backend/README.md)
+- [Frontend Documentation](Frontend/README.md)
 
 ---
 
